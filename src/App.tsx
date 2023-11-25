@@ -1,21 +1,18 @@
 import { Header, MovieList, MovieNoResults } from './components';
-import { useMovies } from './hooks/useMovies';
+import { useSearch, useMovies } from './hooks';
 
-function App (): JSX.Element {
-  const { movies } = useMovies();
+function App(): JSX.Element {
+  const { search } = useSearch();
+  const { movies, getMovies } = useMovies(search);
   const hasMovies = movies?.length > 0;
 
   return (
-    <div className='page'>
-      <h1 className='title'>Buscador de películas</h1>
-      <Header />
-      <main>
+    <div className="page container">
+      <h1 className="title">Buscador de películas</h1>
+      <Header getMovies={getMovies} />
+      <main className="main">
         {/* Aqui iran las peliculas */}
-        {
-          hasMovies
-            ? <MovieList movies={movies} />
-            : <MovieNoResults />
-        }
+        {hasMovies ? <MovieList movies={movies} /> : <MovieNoResults />}
       </main>
     </div>
   );
