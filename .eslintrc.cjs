@@ -29,6 +29,8 @@ module.exports = {
     '@typescript-eslint/space-before-function-paren': 'off',
     '@typescript-eslint/semi': 'off',
     'import/no-absolute-path': 'off',
+    '@typescript-eslint/comma-dangle': 'off',
+    '@typescript-eslint/member-delimiter-style': 'off',
   },
   ignorePatterns: ['.eslintrc.cjs', 'vite.config.ts'],
 };
