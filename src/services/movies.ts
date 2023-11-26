@@ -1,6 +1,9 @@
+import { getEnvVariables } from '../helpers/getEnvVariables';
 import { type Movie, type ResponseWithData } from '../interfaces/Movie';
 
-const API_KEY = 'ee6d55fa';
+const { VITE_API_KEY } = getEnvVariables();
+
+console.log(VITE_API_KEY);
 
 interface Props {
   search: string;
@@ -13,7 +16,7 @@ export const searchMovies = async ({
 
   try {
     const resp = await fetch(
-      `https://www.omdbapi.com/?apikey=${API_KEY}&s=${search}`
+      `https://www.omdbapi.com/?apikey=${VITE_API_KEY}&s=${search}`
     );
     const data = await resp.json();
 
