@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Header, MovieList, MovieNoResults } from './components';
 import { useSearch, useMovies } from './hooks';
 
@@ -17,10 +17,6 @@ function App(): JSX.Element {
 
     return <MovieNoResults />;
   };
-
-  useEffect(() => {
-    console.log('renderizado del getMovies');
-  }, [getMovies]);
 
   const handleSort = (): void => {
     setSort(!sort);
