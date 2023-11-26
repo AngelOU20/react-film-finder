@@ -1,15 +1,20 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { type Movie } from '../interfaces/Movie';
 import { searchMovies } from '../services/movies';
 
-interface Props {
+interface MoviesState {
   movies: Movie[] | null;
   loading: boolean;
   error: string | null;
   getMovies: () => Promise<void>;
 }
 
-export const useMovies = ({ search }: { search: string }): Props => {
+interface MoviesProps {
+  search: string;
+  sort: boolean;
+}
+
+export const useMovies = ({ search, sort }: MoviesProps): MoviesState => {
   const [movies, setMovies] = useState<Movie[] | null>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,8 +38,13 @@ export const useMovies = ({ search }: { search: string }): Props => {
     }
   };
 
+  const sortedMovies = useMemo(() => {
+    return sort && movies !== null
+      ? [...movies].sort((a, b) => a.title.localeCompare(b.title))
+      : movies;
+  }, [sort, movies]);
   return {
-    movies,
+    movies: sortedMovies,
     loading,
     error,
     getMovies,
