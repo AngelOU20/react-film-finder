@@ -1,7 +1,8 @@
 import { FaSearch } from 'react-icons/fa';
 import './Header.scss';
-import { type ChangeEvent, type FormEvent } from 'react';
+import { type ChangeEvent, type FormEvent, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import debounce from 'just-debounce-it';
 
 interface HeaderProps {
   search: string;
@@ -43,13 +44,22 @@ export const Header: React.FC<HeaderProps> = ({
   //   console.log(search);
   // };
 
+  // Debounce para getMovies
+  const debounceGetMovies = useCallback(
+    debounce((search: string) => {
+      console.log('search', search);
+      void getMovies({ search });
+    }, 500),
+    []
+  );
+
   // Note: Forma controlada
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const newQuery = event.target.value;
     if (newQuery.startsWith(' ')) return;
 
     setSearch(newQuery);
-    void getMovies({ search: newQuery });
+    debounceGetMovies(newQuery);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
