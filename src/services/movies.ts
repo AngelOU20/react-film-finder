@@ -3,8 +3,6 @@ import { type Movie, type ResponseWithData } from '../interfaces/Movie';
 
 const { VITE_API_KEY } = getEnvVariables();
 
-console.log(VITE_API_KEY);
-
 interface Props {
   search: string;
 }
