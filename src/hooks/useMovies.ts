@@ -1,54 +1,37 @@
 import { useState } from 'react';
-import { type ResponseWithData, type Movie } from '../interfaces/Movie';
-import withResult from '../mocks/with-result.json';
-import withoutResult from '../mocks/no-result.json';
+import { type Movie } from '../interfaces/Movie';
+import { searchMovies } from '../services/movies';
 
 interface Props {
-  movies: Movie[];
-  getMovies: () => void;
+  movies: Movie[] | null;
+  loading: boolean;
+  error: string | null;
+  getMovies: () => Promise<void>;
 }
 
-interface ResponseData {
-  Search: ResponseWithData[];
-}
+export const useMovies = ({ search }: { search: string }): Props => {
+  const [movies, setMovies] = useState<Movie[] | null>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-export const useMovies = (search: string): Props => {
-  const [responseMovies, setResponseMovies] = useState<ResponseData>({
-    Search: [],
-  });
+  const getMovies = async (): Promise<void> => {
+    try {
+      setLoading(true);
+      setError(null);
 
-  const movies: ResponseWithData[] = responseMovies.Search;
-
-  const mappedMovie: Movie[] = movies?.map((movie) => ({
-    id: movie.imdbID,
-    title: movie.Title,
-    year: movie.Year,
-    type: movie.Type,
-    poster: movie.Poster,
-  }));
-
-  const transformResponse = (apiResponse: any): ResponseData => {
-    if (apiResponse.Response === 'True') {
-      // Si la respuesta es exitosa, devolver la parte de búsqueda
-      return { Search: apiResponse.Search };
+      const newMovies = await searchMovies({ search });
+      setMovies(newMovies);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
     }
-    // Si hay un error, devolver una estructura con un array vacío
-    return { Search: [] };
-  };
-
-  const getMovies = (): void => {
-    if (search !== '') {
-      const transformedResponse = transformResponse(withResult);
-      setResponseMovies(transformedResponse);
-      return;
-    }
-
-    const transformedResponse = transformResponse(withoutResult);
-    setResponseMovies(transformedResponse);
   };
 
   return {
-    movies: mappedMovie,
+    movies,
+    loading,
+    error,
     getMovies,
   };
 };
