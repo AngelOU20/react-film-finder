@@ -1,14 +1,21 @@
 import { FaSearch } from 'react-icons/fa';
 import './Header.scss';
 import { type ChangeEvent, type FormEvent } from 'react';
-import { useSearch } from '../../hooks';
 import PropTypes from 'prop-types';
 
 interface HeaderProps {
-  getMovies: () => void;
+  search: string;
+  setSearch: (newQuery: string) => void;
+  error: string | null;
+  getMovies: () => Promise<void>;
 }
 
-export const Header: React.FC<HeaderProps> = ({ getMovies }) => {
+export const Header: React.FC<HeaderProps> = ({
+  search,
+  setSearch,
+  error,
+  getMovies,
+}) => {
   // Todo: Cambiarlo a forma nativa sin usar hook
   // const inputRef = useRef<HTMLInputElement>(null);
   // const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
@@ -33,8 +40,6 @@ export const Header: React.FC<HeaderProps> = ({ getMovies }) => {
   // };
 
   // Note: Forma controlada
-  const { search, setSearch, error } = useSearch();
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const newQuery = event.target.value;
     if (newQuery.startsWith(' ')) return;
@@ -44,8 +49,7 @@ export const Header: React.FC<HeaderProps> = ({ getMovies }) => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    console.log({ search });
-    getMovies();
+    void getMovies();
   };
 
   return (
@@ -74,5 +78,8 @@ export const Header: React.FC<HeaderProps> = ({ getMovies }) => {
 };
 
 Header.propTypes = {
+  search: PropTypes.string.isRequired,
+  setSearch: PropTypes.func.isRequired,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
   getMovies: PropTypes.func.isRequired,
 };
