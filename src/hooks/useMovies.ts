@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, useCallback } from 'react';
 import { type Movie } from '../interfaces/Movie';
 import { searchMovies } from '../services/movies';
 
@@ -6,7 +6,7 @@ interface MoviesState {
   movies: Movie[] | null;
   loading: boolean;
   error: string | null;
-  getMovies: () => Promise<void>;
+  getMovies: ({ search }: { search: string }) => Promise<void>;
 }
 
 interface MoviesProps {
@@ -20,7 +20,7 @@ export const useMovies = ({ search, sort }: MoviesProps): MoviesState => {
   const [error, setError] = useState<string | null>(null);
   const previousSearch = useRef(search);
 
-  const getMovies = async (): Promise<void> => {
+  const getMovies = useCallback(async ({ search }: { search: string }) => {
     if (previousSearch.current === search) return;
 
     try {
@@ -36,7 +36,7 @@ export const useMovies = ({ search, sort }: MoviesProps): MoviesState => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const sortedMovies = useMemo(() => {
     return sort && movies !== null

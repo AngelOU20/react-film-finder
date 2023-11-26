@@ -7,7 +7,7 @@ interface HeaderProps {
   search: string;
   setSearch: (newQuery: string) => void;
   error: string | null;
-  getMovies: () => Promise<void>;
+  getMovies: ({ search }: { search: string }) => Promise<void>;
   sort: boolean;
   handleSort: () => void;
 }
@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    void getMovies();
+    void getMovies({ search });
   };
 
   return (
