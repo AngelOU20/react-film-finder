@@ -16,7 +16,10 @@
 .page {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
+  width: 100%;
+  padding: 20px; /* Añade un relleno para mejorar la apariencia y separar del borde de la ventana */
 }
 
 .title {
