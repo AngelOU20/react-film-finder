@@ -2,11 +2,13 @@ import { type Movie, type ResponseWithData } from '../interfaces/Movie';
 
 const API_KEY = 'ee6d55fa';
 
+interface Props {
+  search: string;
+}
+
 export const searchMovies = async ({
   search,
-}: {
-  search: string;
-}): Promise<Movie[] | null> => {
+}: Props): Promise<Movie[] | null> => {
   if (search === '') return null;
 
   try {
