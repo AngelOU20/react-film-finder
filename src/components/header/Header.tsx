@@ -49,6 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (newQuery.startsWith(' ')) return;
 
     setSearch(newQuery);
+    void getMovies({ search: newQuery });
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
