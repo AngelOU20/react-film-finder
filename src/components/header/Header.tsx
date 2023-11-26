@@ -8,6 +8,8 @@ interface HeaderProps {
   setSearch: (newQuery: string) => void;
   error: string | null;
   getMovies: () => Promise<void>;
+  sort: boolean;
+  handleSort: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -15,6 +17,8 @@ export const Header: React.FC<HeaderProps> = ({
   setSearch,
   error,
   getMovies,
+  sort,
+  handleSort,
 }) => {
   // Todo: Cambiarlo a forma nativa sin usar hook
   // const inputRef = useRef<HTMLInputElement>(null);
@@ -68,6 +72,10 @@ export const Header: React.FC<HeaderProps> = ({
             placeholder="Avengers, Star Wars, etc"
           />
         </div>
+        <div>
+          <span>Ordenar por título</span>
+          <input type="checkbox" onChange={handleSort} checked={sort} />
+        </div>
         <button type="submit" className="button-search">
           Buscar
         </button>
@@ -82,4 +90,6 @@ Header.propTypes = {
   setSearch: PropTypes.func.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.oneOf([null])]),
   getMovies: PropTypes.func.isRequired,
+  sort: PropTypes.bool.isRequired,
+  handleSort: PropTypes.func.isRequired,
 };
